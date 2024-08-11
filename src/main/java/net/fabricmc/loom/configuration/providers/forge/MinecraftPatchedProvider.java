@@ -146,7 +146,7 @@ public class MinecraftPatchedProvider {
 	}
 
 	protected void initPatchedFiles() {
-		String loader = getExtension().isNeoForge() ? "neoforge" : getExtension().isCleanroom() ? "cleanroom" : "forge";
+		String loader = getExtension().isNeoForge() ? "neoforge" : "forge";
 		String forgeVersion = getExtension().getForgeProvider().getVersion().getCombined();
 		Path forgeWorkingDir = ForgeProvider.getForgeCache(project);
 		// Note: strings used instead of platform id since FML requires one of these exact strings

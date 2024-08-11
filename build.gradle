@@ -20,16 +20,16 @@ plugins {
  * Yeah I know we can just ignore the deprecation warning, but doing so wouldn't alert us to issues when testing against pre-release Gradle versions. Also this is more fun :)
  */
 def brokenConfigurations = [
-	"commonDecompilerRuntimeClasspath",
-	"fernflowerRuntimeClasspath",
-	"cfrRuntimeClasspath",
-	"vineflowerRuntimeClasspath"
+		"commonDecompilerRuntimeClasspath",
+		"fernflowerRuntimeClasspath",
+		"cfrRuntimeClasspath",
+		"vineflowerRuntimeClasspath"
 ]
 
 configurations.configureEach {
 	if (brokenConfigurations.contains(it.name)) {
 		// For some reason Gradle stops us from using Groovy magic to do this, so lets do it the boring way.
-		def field = org.gradle.api.internal.artifacts.configurations.DefaultConfiguration.class.getDeclaredField("roleAtCreation")
+		def field = DefaultConfiguration.class.getDeclaredField("roleAtCreation")
 		field.setAccessible(true)
 		field.set(it, ConfigurationRoles.LEGACY)
 	}
@@ -48,7 +48,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 	}
 }
 
-group = "com.crystaelix"
+group = "xyz.vintageforge"
 def baseVersion = '1.7'
 
 def ENV = System.getenv()
@@ -98,7 +98,7 @@ configurations.configureEach {
 		// failOnNonReproducibleResolution()
 	}
 
-	if (canBeConsumed)  {
+	if (canBeConsumed) {
 		attributes {
 			attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named(GradlePluginApiVersion, GradleVersion.current().getVersion()))
 		}
@@ -140,7 +140,7 @@ dependencies {
 	implementation libs.bundles.asm
 
 	// game handling utils
-	implementation (libs.fabric.stitch) {
+	implementation(libs.fabric.stitch) {
 		exclude module: 'mercury'
 		exclude module: 'enigma'
 	}
@@ -149,7 +149,7 @@ dependencies {
 	implementation libs.fabric.tiny.remapper
 	implementation libs.fabric.access.widener
 	implementation libs.fabric.mapping.io
-	implementation (libs.fabric.lorenz.tiny) {
+	implementation(libs.fabric.lorenz.tiny) {
 		transitive = false
 	}
 	implementation "dev.architectury:refmap-remapper:1.0.5"
@@ -208,7 +208,7 @@ dependencies {
 	}
 	testImplementation testLibs.junit.jupiter.engine
 	testRuntimeOnly testLibs.junit.platform.launcher
-	testImplementation (testLibs.javalin) {
+	testImplementation(testLibs.javalin) {
 		exclude group: 'org.jetbrains.kotlin'
 	}
 	testImplementation testLibs.mockito
@@ -217,7 +217,7 @@ dependencies {
 	compileOnly runtimeLibs.jetbrains.annotations
 	testCompileOnly runtimeLibs.jetbrains.annotations
 
-	testCompileOnly (testLibs.mixin) {
+	testCompileOnly(testLibs.mixin) {
 		transitive = false
 	}
 }
@@ -271,7 +271,7 @@ spotless {
 				// These files use a @MAPPINGS@ token which is not valid Groovy
 				'**/projects/forge/simple/build.gradle',
 				'**/projects/neoforge/simple/build.gradle'
-				)
+		)
 	}
 
 	kotlin {
@@ -302,7 +302,7 @@ codenarc {
 gradlePlugin {
 	plugins {
 		fabricLoom {
-			id = 'com.crystaelix.loom'
+			id = 'xyz.vintageforge.loom'
 			implementationClass = 'net.fabricmc.loom.bootstrap.LoomGradlePluginBootstrap'
 		}
 	}
@@ -329,15 +329,16 @@ test {
 // Workaround https://github.com/gradle/gradle/issues/25898
 tasks.withType(Test).configureEach {
 	jvmArgs = [
-		'--add-opens=java.base/java.lang=ALL-UNNAMED',
-		'--add-opens=java.base/java.util=ALL-UNNAMED',
-		'--add-opens=java.base/java.lang.invoke=ALL-UNNAMED',
-		'--add-opens=java.base/java.net=ALL-UNNAMED'
+			'--add-opens=java.base/java.lang=ALL-UNNAMED',
+			'--add-opens=java.base/java.util=ALL-UNNAMED',
+			'--add-opens=java.base/java.lang.invoke=ALL-UNNAMED',
+			'--add-opens=java.base/java.net=ALL-UNNAMED'
 	]
 }
 
 
 import org.gradle.api.internal.artifacts.configurations.ConfigurationRoles
+import org.gradle.api.internal.artifacts.configurations.DefaultConfiguration
 import org.gradle.launcher.cli.KotlinDslVersion
 import org.gradle.util.GradleVersion
 import org.w3c.dom.Document
@@ -358,8 +359,8 @@ publishing {
 
 			// Manually crate the plugin marker for snapshot versions
 			snapshotPlugin(MavenPublication) {
-				groupId 'com.crystaelix.loom'
-				artifactId 'com.crystaelix.loom.gradle.plugin'
+				groupId 'xyz.vintageforge.loom'
+				artifactId 'xyz.vintageforge.loom.gradle.plugin'
 				version baseVersion + '-SNAPSHOT'
 
 				pom.withXml({
@@ -379,17 +380,16 @@ publishing {
 		}
 	}
 
-//	repositories {
-//		if (ENV.MAVEN_PASS != null) {
-//			maven {
-//				url = "https://deploy.shedaniel.me/"
-//				credentials {
-//					username = "shedaniel"
-//					password = ENV.MAVEN_PASS
-//				}
-//			}
-//		}
-//	}
+	repositories {
+		maven {
+			url = "https://repo.rafi67000.xyz/vintageforge"
+			name = "VintageForge"
+			credentials(org.gradle.api.credentials.PasswordCredentials)
+			authentication {
+				basic(BasicAuthentication)
+			}
+		}
+	}
 }
 
 // Need to tweak this file to pretend we are compatible with j8 so the bootstrap will run.

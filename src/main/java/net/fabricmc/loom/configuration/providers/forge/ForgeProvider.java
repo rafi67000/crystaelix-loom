@@ -55,7 +55,7 @@ public class ForgeProvider extends DependencyProvider {
 	@Override
 	public void provide(DependencyInfo dependency) throws Exception {
 		Dependency dep = dependency.getDependency();
-		version = new ForgeVersion(dep.getGroup(), dep.getName(), dependency.getResolvedVersion());
+		version = new ForgeVersion(dep.getGroup(), dep.getName(), dependency.getResolvedVersion(), platform);
 
 		if (dep instanceof ModuleDependency moduleDependency) {
 			excludeRules = Set.copyOf(moduleDependency.getExcludeRules());
@@ -98,11 +98,12 @@ public class ForgeProvider extends DependencyProvider {
 	@Override
 	public String getTargetConfig() {
 		return switch (platform) {
-		case FORGE -> Constants.Configurations.FORGE;
-		case NEOFORGE -> Constants.Configurations.NEOFORGE;
-		case LEGACYFORGE -> Constants.Configurations.LEGACYFORGE;
-		case CLEANROOM -> Constants.Configurations.CLEANROOM;
-		default -> throw new GradleException("Forge provider can only be used on Forge-like platforms!");
+			case FORGE -> Constants.Configurations.FORGE;
+			case NEOFORGE -> Constants.Configurations.NEOFORGE;
+			case LEGACYFORGE -> Constants.Configurations.LEGACYFORGE;
+			case VINTAGEFORGE -> Constants.Configurations.VINTAGEFORGE;
+			case CLEANROOM -> Constants.Configurations.CLEANROOM;
+			default -> throw new GradleException("Forge provider can only be used on Forge-like platforms!");
 		};
 	}
 

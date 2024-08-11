@@ -123,10 +123,10 @@ public class ForgeRunsProvider {
 		} else if (key.equals("mcp_mappings")) {
 			string = "loom.stub";
 		} else if (key.equals("mcp_to_srg")) {
-			if (!extension.isCleanroom()) {
-				string = extension.getMappingConfiguration().srgToNamedSrg.toAbsolutePath().toString();
-			} else {
+			if (extension.isVintageForge() || extension.isCleanroom()) {
 				string = extension.getMappingConfiguration().srgToNamedTsrg.toAbsolutePath().toString();
+			} else {
+				string = extension.getMappingConfiguration().srgToNamedSrg.toAbsolutePath().toString();
 			}
 		} else if (json.has(key)) {
 			JsonElement element = json.get(key);

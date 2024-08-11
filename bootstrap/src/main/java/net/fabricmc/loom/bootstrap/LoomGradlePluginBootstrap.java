@@ -8,6 +8,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.PluginAware;
 import org.gradle.util.GradleVersion;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This bootstrap is compiled against a minimal gradle API and java 8, this allows us to show a nice error to users who run on unsupported configurations.
@@ -22,7 +23,7 @@ public class LoomGradlePluginBootstrap implements Plugin<PluginAware> {
 	private static final String IDEA_VERSION_PROP_KEY = "idea.version";
 
 	@Override
-	public void apply(PluginAware pluginAware) {
+	public void apply(@NotNull PluginAware pluginAware) {
 		if (pluginAware instanceof Project) {
 			Project project = (Project) pluginAware;
 

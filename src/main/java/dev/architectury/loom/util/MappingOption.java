@@ -10,7 +10,7 @@ public enum MappingOption {
 	public static MappingOption forPlatform(LoomGradleExtensionAPI extension) {
 		return switch (extension.getPlatform().get()) {
 		case FABRIC, QUILT -> DEFAULT;
-		case FORGE, LEGACYFORGE, CLEANROOM -> WITH_SRG;
+		case FORGE, LEGACYFORGE, VINTAGEFORGE, CLEANROOM -> WITH_SRG;
 		case NEOFORGE -> WITH_MOJANG;
 		};
 	}

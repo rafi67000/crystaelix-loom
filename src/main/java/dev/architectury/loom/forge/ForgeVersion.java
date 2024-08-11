@@ -1,5 +1,7 @@
 package dev.architectury.loom.forge;
 
+import net.fabricmc.loom.util.ModPlatform;
+
 public class ForgeVersion {
 	private final String group;
 	private final String name;
@@ -8,6 +10,113 @@ public class ForgeVersion {
 	private final String forgeVersion;
 	private final int majorVersion;
 	private final int buildNumber;
+
+	public ForgeVersion(String group, String name, String combined, ModPlatform platform) {
+
+		switch (platform) {
+			case VINTAGEFORGE: {
+
+				this.group = group;
+				this.name = name;
+				this.combined = combined;
+				this.minecraftVersion = "1.8.9";
+				this.forgeVersion = combined;
+				majorVersion = 8;
+
+				int build;
+
+				var buildIndex = forgeVersion.indexOf("+build.");
+
+				try {
+					if (buildIndex >= 0) {
+						build = Integer.parseInt(forgeVersion.substring(buildIndex + 1));
+					} else {
+						build = -1;
+					}
+				} catch (NumberFormatException e) {
+					build = -1;
+				}
+
+				this.buildNumber = build;
+
+				return;
+			}
+
+			case CLEANROOM: {
+				this.group = group;
+				this.name = name;
+				this.combined = combined;
+				this.minecraftVersion = "1.12.2";
+				this.forgeVersion = combined;
+				this.majorVersion = 12;
+				this.buildNumber = -1;
+				return;
+			}
+
+		}
+
+		this.group = group;
+		this.name = name;
+		this.combined = combined;
+
+		if (combined == null) {
+			this.minecraftVersion = "NO_VERSION";
+			this.forgeVersion = "NO_VERSION";
+			this.majorVersion = -1;
+			this.buildNumber = -1;
+			return;
+		}
+
+		int hyphenIndex = combined.indexOf('-');
+		String forge;
+
+		if (hyphenIndex != -1) {
+			this.minecraftVersion = combined.substring(0, hyphenIndex);
+			forge = combined.substring(hyphenIndex + 1);
+		} else {
+			this.minecraftVersion = "NO_VERSION";
+			forge = combined;
+		}
+
+		hyphenIndex = forge.indexOf('-');
+
+		if (hyphenIndex != -1) {
+			this.forgeVersion = forge.substring(0, hyphenIndex);
+		} else {
+			this.forgeVersion = forge;
+		}
+
+		int dotIndex = forgeVersion.indexOf('.');
+		int major;
+
+		try {
+			if (dotIndex >= 0) {
+				major = Integer.parseInt(forgeVersion.substring(0, dotIndex));
+			} else {
+				major = Integer.parseInt(forgeVersion);
+			}
+		} catch (NumberFormatException e) {
+			major = -1;
+		}
+
+		this.majorVersion = major;
+
+		dotIndex = forgeVersion.lastIndexOf('.');
+		int build;
+
+		try {
+			if (dotIndex >= 0) {
+				build = Integer.parseInt(forgeVersion.substring(dotIndex + 1));
+			} else {
+				build = -1;
+			}
+		} catch (NumberFormatException e) {
+			build = -1;
+		}
+
+		this.buildNumber = build;
+
+	}
 
 	public ForgeVersion(String group, String name, String combined) {
 		this.group = group;
@@ -111,6 +220,6 @@ public class ForgeVersion {
 	 * @return if this Forge version has FML in the cpw.mods package.
 	 */
 	public boolean cpwFml() {
-		return majorVersion < 11;
+		return majorVersion < 8;
 	}
 }

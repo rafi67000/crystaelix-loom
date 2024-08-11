@@ -285,7 +285,7 @@ public class MappingConfiguration {
 					Files.copy(officialToSrgSrg, joinedSrg, StandardCopyOption.REPLACE_EXISTING);
 				}
 
-				if (extension.isCleanroom() && (Files.notExists(srgToNamedTsrg) || extension.refreshDeps())) {
+				if ((extension.isVintageForge() || extension.isCleanroom()) && (Files.notExists(srgToNamedTsrg) || extension.refreshDeps())) {
 					TsrgNamedWriter.writeTo(srgToNamedTsrg, mappingTree, "srg", "named");
 				}
 			}

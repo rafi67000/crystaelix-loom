@@ -72,10 +72,11 @@ public final class FabricModJsonFactory {
 		}
 
 		return switch (schemaVersion) {
-		case 0 -> new FabricModJsonV0(jsonObject, source);
-		case 1 -> new FabricModJsonV1(jsonObject, source);
-		case 2 -> new FabricModJsonV2(jsonObject, source);
-		default -> throw new UnsupportedOperationException(String.format("This version of fabric-loom doesn't support the newer fabric.mod.json schema version of (%s) Please update fabric-loom to be able to read this.", schemaVersion));
+			case 0 -> new FabricModJsonV0(jsonObject, source);
+			case 1 -> new FabricModJsonV1(jsonObject, source);
+			case 2 -> new FabricModJsonV2(jsonObject, source);
+			default ->
+					throw new UnsupportedOperationException(String.format("This version of fabric-loom doesn't support the newer fabric.mod.json schema version of (%s) Please update fabric-loom to be able to read this.", schemaVersion));
 		};
 	}
 
@@ -167,11 +168,12 @@ public final class FabricModJsonFactory {
 
 	public static boolean isModJar(Path input, ModPlatform platform) {
 		return switch (platform) {
-		case FABRIC -> ZipUtils.contains(input, FABRIC_MOD_JSON);
-		case FORGE -> ZipUtils.contains(input, ModsToml.FILE_PATH);
-		case NEOFORGE -> ZipUtils.contains(input, ModsToml.NEOFORGE_FILE_PATH) || ZipUtils.contains(input, ModsToml.FILE_PATH);
-		case QUILT -> ZipUtils.contains(input, QuiltModJson.FILE_NAME) || ZipUtils.contains(input, FABRIC_MOD_JSON);
-		case LEGACYFORGE, CLEANROOM -> ZipUtils.contains(input, McModInfo.FILE_PATH);
+			case FABRIC -> ZipUtils.contains(input, FABRIC_MOD_JSON);
+			case FORGE -> ZipUtils.contains(input, ModsToml.FILE_PATH);
+			case NEOFORGE ->
+					ZipUtils.contains(input, ModsToml.NEOFORGE_FILE_PATH) || ZipUtils.contains(input, ModsToml.FILE_PATH);
+			case QUILT -> ZipUtils.contains(input, QuiltModJson.FILE_NAME) || ZipUtils.contains(input, FABRIC_MOD_JSON);
+			case LEGACYFORGE, VINTAGEFORGE, CLEANROOM -> ZipUtils.contains(input, McModInfo.FILE_PATH);
 		};
 	}
 
@@ -191,11 +193,12 @@ public final class FabricModJsonFactory {
 		}
 
 		return switch (platform) {
-		case FABRIC -> Files.exists(fs.getPath(FABRIC_MOD_JSON));
-		case FORGE -> Files.exists(fs.getPath(ModsToml.FILE_PATH));
-		case NEOFORGE -> Files.exists(fs.getPath(ModsToml.NEOFORGE_FILE_PATH)) || Files.exists(fs.getPath(ModsToml.FILE_PATH));
-		case QUILT -> Files.exists(fs.getPath(QuiltModJson.FILE_NAME)) || Files.exists(fs.getPath(FABRIC_MOD_JSON));
-		case LEGACYFORGE, CLEANROOM -> Files.exists(fs.getPath(McModInfo.FILE_PATH));
+			case FABRIC -> Files.exists(fs.getPath(FABRIC_MOD_JSON));
+			case FORGE -> Files.exists(fs.getPath(ModsToml.FILE_PATH));
+			case NEOFORGE ->
+					Files.exists(fs.getPath(ModsToml.NEOFORGE_FILE_PATH)) || Files.exists(fs.getPath(ModsToml.FILE_PATH));
+			case QUILT -> Files.exists(fs.getPath(QuiltModJson.FILE_NAME)) || Files.exists(fs.getPath(FABRIC_MOD_JSON));
+			case LEGACYFORGE, VINTAGEFORGE, CLEANROOM -> Files.exists(fs.getPath(McModInfo.FILE_PATH));
 		};
 	}
 }

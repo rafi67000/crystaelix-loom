@@ -302,6 +302,9 @@ public interface LoomGradleExtensionAPI {
 	default boolean isLegacyForge() {
 		return getPlatform().get() == ModPlatform.LEGACYFORGE;
 	}
+	default boolean isVintageForge() {
+		return getPlatform().get() == ModPlatform.VINTAGEFORGE;
+	}
 
 	default boolean isCleanroom() {
 		return getPlatform().get() == ModPlatform.CLEANROOM;
@@ -336,6 +339,7 @@ public interface LoomGradleExtensionAPI {
 	 *
 	 * @return the Forge extension
 	 * @throws UnsupportedOperationException if running on another platform
+	 * @see #getForge()
 	 * @see #isForge()
 	 */
 	ForgeExtensionAPI getForge();
@@ -347,6 +351,7 @@ public interface LoomGradleExtensionAPI {
 	 *
 	 * @return the NeoForge extension
 	 * @throws UnsupportedOperationException if running on another platform
+	 * @see #getForge()
 	 * @see #isNeoForge()
 	 */
 	NeoForgeExtensionAPI getNeoForge();
@@ -358,6 +363,7 @@ public interface LoomGradleExtensionAPI {
 	 *
 	 * @return the Forge extension
 	 * @throws UnsupportedOperationException if running on another platform
+	 * @see #getForge()
 	 * @see #isLegacyForge()
 	 */
 	default ForgeExtensionAPI getLegacyForge() {
@@ -368,6 +374,25 @@ public interface LoomGradleExtensionAPI {
 	 * Alias of {@link #forge(Action)}.
 	 */
 	default void legacyForge(Action<ForgeExtensionAPI> action) {
+		forge(action);
+	}
+
+	/**
+	 * Gets the Forge extension used to configure VintageForge details. Alias of {@link #getForge()}.
+	 *
+	 * @return the Forge extension
+	 * @throws UnsupportedOperationException if running on another platform
+	 * @see #getForge()
+	 * @see #isVintageForge()
+	 */
+	default ForgeExtensionAPI getVintageForge() {
+		return getForge();
+	}
+
+	/**
+	 * Alias of {@link #forge(Action)}.
+	 */
+	default void vintageForge(Action<ForgeExtensionAPI> action) {
 		forge(action);
 	}
 
