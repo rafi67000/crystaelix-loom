@@ -205,7 +205,7 @@ public class ForgeVersion {
 	 * @return if this Forge version uses the userdev3 classifier for userdev.
 	 */
 	public boolean userdev3() {
-		return "net.minecraftforge".equals(group) && "forge".equals(name)
+		return group.equals("net.minecraftforge") && name.equals("forge")
 				&& majorVersion == 14 && buildNumber > 2847;
 	}
 
@@ -213,7 +213,7 @@ public class ForgeVersion {
 	 * @return if this Forge version has Minecraft version mod directories.
 	 */
 	public boolean versionModDirs() {
-		return "net.minecraftforge".equals(group) && "forge".equals(name)
+		return group.equals("net.minecraftforge") && name.equals("forge")
 				&& (majorVersion < 14 || majorVersion == 14 && buildNumber < 2656);
 	}
 
@@ -221,7 +221,7 @@ public class ForgeVersion {
 	 * @return if this Forge version has FML in the cpw.mods package.
 	 */
 	public boolean cpwFml() {
-		return "net.minecraftforge".equals(group) && "forge".equals(name)
+		return group.equals("net.minecraftforge") && name.equals("forge")
 				&& majorVersion < 8;
 	}
 }
