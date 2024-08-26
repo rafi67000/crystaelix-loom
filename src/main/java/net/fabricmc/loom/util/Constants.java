@@ -195,11 +195,9 @@ public class Constants {
 		public static final String MIXIN_CONFIGS_MANIFEST_KEY = "MixinConfigs";
 
 		/**
-		 * The minimum Forge version that needs Union Relauncher to use {@code MOD_CLASSES}.
+		 * The minimum Forge version that needs bootstrap-dev to use {@code MOD_CLASSES}.
 		 */
-		public static final int MIN_UNION_RELAUNCHER_VERSION = 49;
-		public static final String UNION_RELAUNCHER_MAIN_CLASS = "juuxel.unionrelauncher.UnionRelauncher";
-		public static final String UNION_RELAUNCHER_MAIN_CLASS_PROPERTY = "unionRelauncher.mainClass";
+		public static final int MIN_BOOTSTRAP_DEV_VERSION = 49;
 
 		/**
 		 * The minimum version of Forge that uses "mojang" as the namespace in production.
@@ -217,6 +215,9 @@ public class Constants {
 		public static final String CPW_FML_TWEAKER = "cpw.mods.fml.common.launcher.FMLTweaker";
 		public static final String FML_SERVER_TWEAKER = "net.minecraftforge.fml.common.launcher.FMLServerTweaker";
 		public static final String CPW_FML_SERVER_TWEAKER = "cpw.mods.fml.common.launcher.FMLServerTweaker";
+		public static final String MIXIN_TWEAKER = "org.spongepowered.asm.launch.MixinTweaker";
 		public static final String ACCESS_TRANSFORMERS_MANIFEST_KEY = "FMLAT";
+		public static final String TWEAK_CLASS_MANIFEST_KEY = "TweakClass";
+		public static final String FORCE_LOAD_AS_MOD_MANIFEST_KEY = "ForceLoadAsMod";
 	}
 }
